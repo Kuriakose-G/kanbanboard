@@ -4,19 +4,24 @@
             <input [(ngModel)]="newColumnName" placeholder="Add a new column" />
             <button (click)="addColumn()">Add Column</button>
         </div>
-        <div class="bin-icon" (dragover)="onDragOverBin($event)" (drop)="onDropBin($event)"
-            (dragleave)="onDragLeaveBin()">
-            🗑️
-            <div *ngIf="isDragging" class="delete-message">Delete</div>
-        </div>
     </div>
     <div class="kanban-lists">
         <div *ngFor="let list of board; let i = index" class="kanban-list" (dragover)="onDragOver($event)"
             (drop)="onDrop($event, i)">
-            <h3>{{ list.name }}</h3>
+            <div class="list-header">
+                <h3>{{ list.name }}</h3>
+                <div class="bin-icon" (click)="removeColumn(i)">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+            </div>
             <div *ngFor="let card of list.cards; let j = index" class="kanban-card" draggable="true"
                 (dragstart)="onDragStart($event, i, j)">
-                {{ card.title }}
+                <div class="card-content">
+                    {{ card.title }}
+                    <div class="bin-icon1" (click)="removeCard(i, j)">
+                        <i class="fas fa-trash-alt"></i>
+                    </div>
+                </div>
             </div>
             <div class="add-card">
                 <input [(ngModel)]="newCardTitle[i]" placeholder="Add a new card" />
