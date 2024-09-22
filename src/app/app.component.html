@@ -4,8 +4,10 @@
             <input [(ngModel)]="newColumnName" placeholder="Add a new column" />
             <button (click)="addColumn()">Add Column</button>
         </div>
-        <div class="bin-icon" (dragover)="onDragOverBin($event)" (drop)="onDropBin($event)">
+        <div class="bin-icon" (dragover)="onDragOverBin($event)" (drop)="onDropBin($event)"
+            (dragleave)="onDragLeaveBin()">
             🗑️
+            <div *ngIf="isDragging" class="delete-message">Delete</div>
         </div>
     </div>
     <div class="kanban-lists">

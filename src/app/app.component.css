@@ -1,21 +1,21 @@
 .kanban-board {
-    display: flex; 
-    flex-direction: column; 
+    display: flex;
+    flex-direction: column;
     padding: 20px;
     background-color: #f0f2f5;
-    min-height: 100vh; 
+    min-height: 100vh;
 }
 
 .kanban-header {
-    display: flex; 
-    justify-content: space-between; 
-    margin-bottom: 20px; 
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
 .add-column {
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .add-column input {
@@ -37,23 +37,25 @@
 }
 
 .bin-icon {
-    font-size: 24px; 
-    cursor: pointer; 
-    padding: 5px; 
-    border: 2px dashed #dc3545; 
-    border-radius: 5px; 
+    position: relative; /* Ensure delete message is positioned relative to this */
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    border: 2px dashed #dc3545;
+    border-radius: 5px;
     transition: background-color 0.3s;
 }
 
+
 .bin-icon:hover {
-    background-color: #f8d7da; 
+    background-color: #f8d7da;
 }
 
 .kanban-lists {
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 20px; 
-    flex-grow: 1; 
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    flex-grow: 1;
 }
 
 .kanban-list {
@@ -61,8 +63,8 @@
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     padding: 15px;
-    max-height: calc(50vh - 40px); 
-    overflow-y: auto; 
+    max-height: calc(50vh - 40px);
+    overflow-y: auto;
 }
 
 .kanban-card {
@@ -76,16 +78,16 @@
 }
 
 .add-card {
-    display: flex; 
-    align-items: center; 
-    margin-top: 15px; 
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
 }
 
 .add-card input {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    flex-grow: 1; 
+    flex-grow: 1;
     margin-right: 10px;
     transition: border-color 0.3s;
 }
@@ -99,7 +101,24 @@
     cursor: pointer;
     transition: background-color 0.3s;
 }
+
 .kanban-list.dragging {
-    opacity: 0.5; /* Dim the column being dragged */
+    opacity: 0.5;
+    /* Dim the column being dragged */
     transition: opacity 0.2s ease;
+}
+
+.delete-message {
+    position: absolute;
+    background-color: rgba(255, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    top: -35px; /* Position above the bin */
+    left: 50%; /* Center it horizontally */
+    transform: translateX(-50%); /* Adjust to center */
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Add shadow for better visibility */
+    transition: opacity 0.2s ease; /* Smooth appearance */
+    opacity: 1; /* Ensure it's visible */
 }

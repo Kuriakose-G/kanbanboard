@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   newColumnName: string = '';
 
   showRemove: boolean[] = [];
-  private draggedColumnIndex: number | null = null;
+  isDragging: boolean = false;
 
   ngOnInit() {
     this.initializeBoard();
@@ -49,6 +49,7 @@ export class AppComponent implements OnInit {
   }
 
   onDragStart(event: DragEvent, listIndex: number, cardIndex: number) {
+    this.isDragging = false;
     event.dataTransfer?.setData('text', JSON.stringify({ listIndex, cardIndex }));
   }
 
@@ -70,6 +71,7 @@ export class AppComponent implements OnInit {
   }
 
   onDragOver(event: DragEvent) {
+    this.isDragging = false;
     event.preventDefault();
   }
 
@@ -93,35 +95,41 @@ export class AppComponent implements OnInit {
   }
 
   onDragOverBin(event: DragEvent) {
+    this.isDragging = true;
     event.preventDefault(); // Allow dropping
-}
+  }
 
-onDropBin(event: DragEvent) {
+  onDropBin(event: DragEvent) {
     event.preventDefault();
+    this.isDragging = false;
     const data = event.dataTransfer?.getData('text');
-    
+
     if (data) {
-        const { listIndex, cardIndex } = JSON.parse(data);
-        
-        if (cardIndex !== undefined) {
-            // Remove card if it's a card being dropped
-            this.removeCard(listIndex, cardIndex);
-        } else {
-            // Remove column if it's a column being dropped (not possible here, but left for completeness)
-            this.removeColumn(listIndex);
-        }
+      const { listIndex, cardIndex } = JSON.parse(data);
+
+      if (cardIndex !== undefined) {
+        // Remove card if it's a card being dropped
+        this.removeCard(listIndex, cardIndex);
+      } else {
+        // Remove column if it's a column being dropped (not possible here, but left for completeness)
+        this.removeColumn(listIndex);
+      }
     }
-}
+  }
 
-removeColumn(index: number) {
-  this.board.splice(index, 1); // Remove column by index
-  this.newCardTitle.splice(index, 1); // Remove corresponding new card title
-  this.showRemove.splice(index, 1); // Remove corresponding visibility
-}
+  onDragLeaveBin() {
+    this.isDragging = false; // Reset dragging state if leaving the bin
+  }
 
-removeCard(listIndex: number, cardIndex: number) {
-  this.board[listIndex].cards.splice(cardIndex, 1); // Remove card by index
-}
+  removeColumn(index: number) {
+    this.board.splice(index, 1); // Remove column by index
+    this.newCardTitle.splice(index, 1); // Remove corresponding new card title
+    this.showRemove.splice(index, 1); // Remove corresponding visibility
+  }
+
+  removeCard(listIndex: number, cardIndex: number) {
+    this.board[listIndex].cards.splice(cardIndex, 1); // Remove card by index
+  }
 
 
 }
