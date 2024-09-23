@@ -1,5 +1,6 @@
 <div class="kanban-board">
     <div class="kanban-header">
+        <h1>Kanban Board</h1>
         <div class="add-column">
             <input [(ngModel)]="newColumnName" placeholder="Add a new column" />
             <button (click)="addColumn()">Add Column</button>
@@ -9,17 +10,33 @@
         <div *ngFor="let list of board; let i = index" class="kanban-list" (dragover)="onDragOver($event)"
             (drop)="onDrop($event, i)">
             <div class="list-header">
-                <h3>{{ list.name }}</h3>
-                <div class="bin-icon" (click)="removeColumn(i)">
-                    <i class="fas fa-trash-alt"></i>
+                <div *ngIf="editColumnIndex !== i; else editColumnName">
+                    <h3>{{ list.name }}</h3>
+                </div>
+                <ng-template #editColumnName>
+                    <input [(ngModel)]="list.name" (blur)="saveColumnName(i)" />
+                </ng-template>
+                <div class="icons">
+                    <i class="fa-solid fa-pencil" (click)="editColumn(i)"></i>
+                    <div class="bin-icon" (click)="removeColumn(i)">
+                        <i class="fas fa-trash-alt"></i>
+                    </div>
                 </div>
             </div>
             <div *ngFor="let card of list.cards; let j = index" class="kanban-card" draggable="true"
                 (dragstart)="onDragStart($event, i, j)">
                 <div class="card-content">
-                    {{ card.title }}
-                    <div class="bin-icon1" (click)="removeCard(i, j)">
-                        <i class="fas fa-trash-alt"></i>
+                    <div *ngIf="editCardIndex.i !== i || editCardIndex.j !== j; else editCardName">
+                        {{ card.title }}
+                    </div>
+                    <ng-template #editCardName>
+                        <input [(ngModel)]="card.title" (blur)="saveCardTitle(i, j)" />
+                    </ng-template>
+                    <div class="icons">
+                        <i class="fa-solid fa-pencil" (click)="editCard(i, j)"></i>
+                        <div class="bin-icon" (click)="removeCard(i, j)">
+                            <i class="fas fa-trash-alt"></i>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -30,6 +30,9 @@ export class AppComponent implements OnInit {
   showRemove: boolean[] = [];
   isDragging: boolean = false;
 
+  editCardIndex: { i: number, j: number } = { i: -1, j: -1 };
+  editColumnIndex: number = -1;
+
   ngOnInit() {
     this.initializeBoard();
     this.showRemove = Array(this.board.length).fill(false);
@@ -94,33 +97,6 @@ export class AppComponent implements OnInit {
     }
   }
 
-  onDragOverBin(event: DragEvent) {
-    this.isDragging = true;
-    event.preventDefault(); // Allow dropping
-  }
-
-  onDropBin(event: DragEvent) {
-    event.preventDefault();
-    this.isDragging = false;
-    const data = event.dataTransfer?.getData('text');
-
-    if (data) {
-      const { listIndex, cardIndex } = JSON.parse(data);
-
-      if (cardIndex !== undefined) {
-        // Remove card if it's a card being dropped
-        this.removeCard(listIndex, cardIndex);
-      } else {
-        // Remove column if it's a column being dropped (not possible here, but left for completeness)
-        this.removeColumn(listIndex);
-      }
-    }
-  }
-
-  onDragLeaveBin() {
-    this.isDragging = false; // Reset dragging state if leaving the bin
-  }
-
   removeColumn(index: number) {
     this.board.splice(index, 1); // Remove column by index
     this.newCardTitle.splice(index, 1); // Remove corresponding new card title
@@ -131,5 +107,20 @@ export class AppComponent implements OnInit {
     this.board[listIndex].cards.splice(cardIndex, 1); // Remove card by index
   }
 
+  editCard(listIndex: number, cardIndex: number) {
+    this.editCardIndex = { i: listIndex, j: cardIndex };
+  }
+
+  saveCardTitle(listIndex: number, cardIndex: number) {
+    this.editCardIndex = { i: -1, j: -1 }; // Reset edit mode
+  }
+
+  editColumn(index: number) {
+    this.editColumnIndex = index;
+  }
+
+  saveColumnName(index: number) {
+    this.editColumnIndex = -1; // Reset edit mode
+  }
 
 }
